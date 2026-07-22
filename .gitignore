@@ -1,0 +1,13 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+public/uploads/
+public/source/
+server_log.txt
+.next/
+.decap/.cache/

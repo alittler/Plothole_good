@@ -1,0 +1,6 @@
+{
+  "name": "Plothole",
+  "description": "Analyze literary manuscripts of any genre, extract highly structured character profiles and relations, and map them with Plothole AI.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

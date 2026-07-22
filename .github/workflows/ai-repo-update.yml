@@ -1,0 +1,48 @@
+name: AI Repository Metadata Sync
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'scripts/**'
+      - 'package.json'
+      - 'manifest.yaml'
+      - 'metadata.json'
+
+jobs:
+  sync-metadata:
+    runs-on: ubuntu-latest
+    
+    # Required for 'gh repo edit' to work
+    permissions:
+      contents: read
+      repository-projects: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Doppler CLI
+        run: |
+          (curl -Ls https://cli.doppler.com/install.sh || wget -qO- https://cli.doppler.com/install.sh) | sudo sh
+
+      - name: Sync Metadata with AI
+        env:
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Use doppler run to inject secrets (GEMINI_API_KEY) into the script
+          doppler run -- tsx scripts/sync-repo-ai.ts
